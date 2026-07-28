@@ -42,10 +42,17 @@ test('createMediaFrameState follows the uploaded media dimensions', () => {
   assert.deepEqual(createMediaFrameState(800, 1200), {
     adaptive: true,
     aspectRatio: '800 / 1200',
+    orientation: 'portrait',
   });
   assert.deepEqual(createMediaFrameState(1600, 900), {
     adaptive: true,
     aspectRatio: '1600 / 900',
+    orientation: 'landscape',
+  });
+  assert.deepEqual(createMediaFrameState(1000, 1000), {
+    adaptive: true,
+    aspectRatio: '1000 / 1000',
+    orientation: 'square',
   });
 });
 
@@ -53,5 +60,6 @@ test('createMediaFrameState falls back when media dimensions are unavailable', (
   assert.deepEqual(createMediaFrameState(0, 1200), {
     adaptive: false,
     aspectRatio: '16 / 10',
+    orientation: 'default',
   });
 });
