@@ -20,6 +20,7 @@ export const days=[
 export function calculateProgress(states){const total=states.length,completed=states.filter(Boolean).length;return{completed,total,percentage:total?Math.round(completed/total*100):0}}
 export function filterDaysByPhase(items,phase){if(phase==='explore')return items.filter(({day})=>day<=10);if(phase==='optimize')return items.filter(({day})=>day>=11);return items}
 export function createStorageKey(day){return`oc-action-plan-day-${day}`}
+export function createMediaFrameState(width,height){const mediaWidth=Number(width),mediaHeight=Number(height);if(!Number.isFinite(mediaWidth)||!Number.isFinite(mediaHeight)||mediaWidth<=0||mediaHeight<=0)return{adaptive:false,aspectRatio:'16 / 10'};return{adaptive:true,aspectRatio:`${mediaWidth} / ${mediaHeight}`}}
 const readCompleted=day=>{try{return localStorage.getItem(createStorageKey(day))==='true'}catch{return false}};
 const writeCompleted=(day,value)=>{try{localStorage.setItem(createStorageKey(day),String(value))}catch{}};
 const objectUrls=new Map();
@@ -43,4 +44,9 @@ function showStatus(card,text,error=false){const status=card.querySelector('.sav
 async function renderDays(phase='all'){const container=document.querySelector('#day-grid');if(!container)return;objectUrls.forEach(url=>URL.revokeObjectURL(url));objectUrls.clear();container.innerHTML=filterDaysByPhase(days,phase).map(cardTemplate).join('');const cards=[...container.querySelectorAll('.oc-workbench')];cards.forEach(attachCardEvents);await Promise.all(cards.map(hydrateCard))}
 function updateProgress(){const result=calculateProgress(days.map(({day})=>readCompleted(day)));document.querySelector('#progress-value').textContent=`${result.percentage}%`;document.querySelector('#progress-count').textContent=`${result.completed} / ${result.total} DAYS`;document.querySelector('#progress-ring').style.setProperty('--progress',`${result.percentage*3.6}deg`)}
 function init(){renderDays();updateProgress();document.querySelectorAll('[data-phase]').forEach(button=>button.addEventListener('click',()=>{document.querySelectorAll('[data-phase]').forEach(item=>item.classList.remove('is-active'));button.classList.add('is-active');renderDays(button.dataset.phase)}))}
-if(typeof document!=='undefined')document.addEventListener('DOMContentLoaded',init);
+function applyMediaFrameRatio(media){const canvas=media.closest?.('[data-media-canvas]');if(!canvas)return;const isVideo=media.tagName==='VIDEO';const state=createMediaFrameState(isVideo?media.videoWidth:media.naturalWidth,isVideo?media.videoHeight:media.naturalHeight);canvas.style.setProperty('--media-aspect',state.aspectRatio);canvas.dataset.adaptiveRatio=String(state.adaptive)}
+if(typeof document!=='undefined'){
+document.addEventListener('load',event=>{if(event.target?.matches?.('[data-media-canvas] img'))applyMediaFrameRatio(event.target)},true);
+document.addEventListener('loadedmetadata',event=>{if(event.target?.matches?.('[data-media-canvas] video'))applyMediaFrameRatio(event.target)},true);
+document.addEventListener('DOMContentLoaded',init);
+}
