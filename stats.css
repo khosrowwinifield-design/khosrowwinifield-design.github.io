@@ -1,5 +1,0 @@
-@import url("./stats-base.css");
-
-html, body.stats-page { max-width: 100%; overflow-x: hidden; }
-.dashboard-shell, .table-panel, .table-scroll { min-width: 0; max-width: 100%; }
-.table-scroll { overflow-x: auto; overscroll-behavior-inline: contain; }

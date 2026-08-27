@@ -1,9 +1,0 @@
-Use case: stylized-concept
-Asset type: vertical key visual and first-frame concept for a Xiaohongshu AI OC short video.
-Primary request: Create a sophisticated, restrained female-female OC cinematic still titled conceptually “Lost and Found”, with subtle romantic tension and no explicit romance.
-Scene/backdrop: a nearly empty contemporary East Asian railway station lost-property office at night, glass service window, cool fluorescent ceiling light, distant platform lights and soft train reflections.
-Subjects: exactly two adult East Asian women in their mid-to-late twenties. Woman A is behind the glass counter in a clean muted blue-gray station uniform, composed and emotionally unreadable, looking down at a single old silver earring in her hand. Woman B stands on the public side wearing a charcoal wool coat and one restrained dark burgundy scarf, watching Woman A with familiarity and quiet hurt. They are not touching.
-Style/medium: premium contemporary cinema still, fashion editorial realism, natural facial proportions and skin texture, subtle film grain, restrained East Asian independent-film visual language; not anime, fantasy illustration, or melodramatic television.
-Composition/framing: vertical medium-wide shot through the glass partition, both women visible with physical distance between them; the earring and Woman A’s paused hand form the focal point; layered reflections create emotional separation; generous negative space for subtitles.
-Lighting/mood: cool desaturated blue-gray station lighting with one restrained warm burgundy accent, melancholic, unresolved, quiet and realistic.
-Constraints: no text, logo, watermark, touching, kissing, exaggerated expressions, neon cyberpunk effects, magical elements, glamour makeup, school uniforms, heart symbols, red-string symbolism, or generic GL poster clichés.
