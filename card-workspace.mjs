@@ -1,6 +1,15 @@
 const DB_NAME = 'oc-content-workspace';
 const STORE_NAME = 'media-assets';
 const DB_VERSION = 1;
+export const IMAGE_SLOTS = Object.freeze(['main', 'secondary', 'item', 'sheet']);
+
+export function isImageSlot(kind) {
+  return kind === 'image' || IMAGE_SLOTS.includes(kind);
+}
+
+function mediaStorageKey(kind) {
+  return kind === 'main' || kind === 'image' ? 'image' : kind;
+}
 
 export function classifyMediaFile(file) {
   const type = file?.type || '';
@@ -20,6 +29,7 @@ export function normalizeDraft(draft = {}) {
     videoPrompt: typeof draft.videoPrompt === 'string' ? draft.videoPrompt : '',
     notes: typeof draft.notes === 'string' ? draft.notes : '',
     activeMedia: draft.activeMedia === 'video' ? 'video' : 'image',
+    activeGallerySlot: IMAGE_SLOTS.includes(draft.activeGallerySlot) ? draft.activeGallerySlot : 'main',
   };
 }
 
@@ -49,11 +59,12 @@ function openDatabase() {
 
 export async function saveMedia(day, kind, file) {
   const validation = classifyMediaFile(file);
-  if (!validation.valid || validation.kind !== kind) throw new Error(kind === 'image' ? '图片需小于15MB' : '视频需小于200MB');
+  const imageKind = isImageSlot(kind);
+  if (!validation.valid || validation.kind !== (imageKind ? 'image' : 'video')) throw new Error(imageKind ? '图片需小于15MB' : '视频需小于200MB');
   const db = await openDatabase();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readwrite');
-    transaction.objectStore(STORE_NAME).put({ file, name: file.name, type: file.type, updatedAt: Date.now() }, `${day}:${kind}`);
+    transaction.objectStore(STORE_NAME).put({ file, name: file.name, type: file.type, updatedAt: Date.now() }, `${day}:${mediaStorageKey(kind)}`);
     transaction.oncomplete = () => { db.close(); resolve(true); };
     transaction.onerror = () => { db.close(); reject(transaction.error || new Error('素材保存失败')); };
   });
@@ -63,7 +74,7 @@ export async function readMedia(day, kind) {
   const db = await openDatabase();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readonly');
-    const request = transaction.objectStore(STORE_NAME).get(`${day}:${kind}`);
+    const request = transaction.objectStore(STORE_NAME).get(`${day}:${mediaStorageKey(kind)}`);
     request.onsuccess = () => { db.close(); resolve(request.result || null); };
     request.onerror = () => { db.close(); reject(request.error || new Error('素材读取失败')); };
   });
@@ -73,7 +84,7 @@ export async function removeMedia(day, kind) {
   const db = await openDatabase();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(STORE_NAME, 'readwrite');
-    transaction.objectStore(STORE_NAME).delete(`${day}:${kind}`);
+    transaction.objectStore(STORE_NAME).delete(`${day}:${mediaStorageKey(kind)}`);
     transaction.oncomplete = () => { db.close(); resolve(true); };
     transaction.onerror = () => { db.close(); reject(transaction.error || new Error('素材删除失败')); };
   });

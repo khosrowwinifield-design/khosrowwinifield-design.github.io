@@ -1,0 +1,12 @@
+.plan-only { background:#11100e; min-height:100vh; }
+.plan-only .section { min-height:100vh; border:0; }
+.plan-only .plan h1 { margin:0; font-size:clamp(52px,6vw,92px); line-height:1; font-weight:500; letter-spacing:-.05em; }
+.plan-actions { display:flex; flex-direction:column; align-items:flex-end; gap:18px; }
+.dashboard-link { color:#e9ff48; text-decoration:none; border-bottom:1px solid; padding-bottom:4px; font-size:13px; }
+.compact-progress { display:grid; grid-template-columns:auto auto 160px; justify-content:end; align-items:center; gap:15px; margin:-24px 0 26px; color:#8e887e; font:700 10px Georgia,serif; letter-spacing:.12em; }
+.compact-progress strong { color:#e9ff48; font-size:13px; }
+.compact-progress-bar { height:3px; background:#38352f; overflow:hidden; }
+.compact-progress-bar i { display:block; height:100%; width:var(--progress,0deg); max-width:100%; background:#e9ff48; }
+.plan-only .progress-ring { width:auto; aspect-ratio:auto; border-radius:0; display:block; background:none; }
+.plan-only .progress-ring::after { display:none; }
+@media(max-width:700px){.plan-actions{align-items:flex-start}.compact-progress{margin:0 0 22px;justify-content:start}.plan-only .plan h1{font-size:54px}}
